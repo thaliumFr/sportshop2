@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'ionic.sportshop2',
-  appName: 'sportshop2',
+  appId: 'io.ionic.starter',
+  appName: 'ionic-app-base',
   webDir: 'dist'
 };
 

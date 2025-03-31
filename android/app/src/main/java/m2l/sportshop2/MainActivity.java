@@ -1,4 +1,4 @@
-package ionic.sportshop2;
+package m2l.sportshop2;
 
 import com.getcapacitor.BridgeActivity;
 

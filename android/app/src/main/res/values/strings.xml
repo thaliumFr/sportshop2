@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">sportshop2</string>
     <string name="title_activity_main">sportshop2</string>
-    <string name="package_name">ionic.sportshop2</string>
-    <string name="custom_url_scheme">ionic.sportshop2</string>
+    <string name="package_name">m2l.sportshop2</string>
+    <string name="custom_url_scheme">m2l.sportshop2</string>
 </resources>
