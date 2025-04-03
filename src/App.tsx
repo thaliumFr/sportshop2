@@ -11,7 +11,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { cart, cartOutline, ellipse, square, storefront, triangle } from 'ionicons/icons';
+import { cart as cartIcon, cartOutline, ellipse, square, storefront, triangle } from 'ionicons/icons';
 import Shop from './pages/shop';
 import Panier from './pages/panier';
 import Tab3 from './pages/Tab3';
@@ -49,6 +49,8 @@ import './theme/variables.css';
 
 setupIonicReact();
 
+import { Cart, cart } from "./back/cart"
+
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
@@ -74,9 +76,9 @@ const App: React.FC = () => (
             <IonLabel>Magasin</IonLabel>
           </IonTabButton>
           <IonTabButton tab="panier" href="/panier">
-            <IonIcon aria-hidden="true" icon={cart} />
+            <IonIcon aria-hidden="true" icon={cartIcon} />
             <IonLabel>Panier</IonLabel>
-            <IonBadge color="danger">3</IonBadge>
+            <IonBadge color="danger">{cart.ItemCount()}</IonBadge>
           </IonTabButton>
           <IonTabButton tab="tab3" href="/tab3">
             <IonIcon aria-hidden="true" icon={ellipse} />

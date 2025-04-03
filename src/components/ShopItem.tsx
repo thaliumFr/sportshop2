@@ -2,6 +2,7 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, 
 import Product from "../pages/Product";
 
 import "./ShopItem.css";
+import { cart, Item } from "../back/cart"
 
 interface ContainerProps {
     ItemID: string;

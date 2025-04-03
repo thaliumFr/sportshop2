@@ -61,3 +61,5 @@ export class Cart {
     }
   }
 }
+
+export let cart = new Cart();

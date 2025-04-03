@@ -1,8 +1,10 @@
-import { IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './shop.css';
 import { storefront } from 'ionicons/icons';
 import ShopItem from "../components/ShopItem";
+import { getProducts } from "../back/API";
+let products = getProducts()
 
 const Shop: React.FC = () => {
   return (
@@ -19,7 +21,8 @@ const Shop: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
-          <ShopItem ItemID="1" />
+          {products}
+
           <ShopItem ItemID="2" />
         </IonContent>
       </IonContent>
