@@ -1,13 +1,14 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
-import './Tab2.css';
+import './panier.css';
+import { cart, storefront } from 'ionicons/icons';
 
-const Tab2: React.FC = () => {
+const Panier: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 2</IonTitle>
+          <IonTitle><IonIcon aria-hidden="true" icon={cart} /> Panier</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -22,4 +23,4 @@ const Tab2: React.FC = () => {
   );
 };
 
-export default Tab2;
+export default Panier;
