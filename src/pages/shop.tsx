@@ -3,6 +3,8 @@ import ExploreContainer from '../components/ExploreContainer';
 import './shop.css';
 import { storefront } from 'ionicons/icons';
 import ShopItem from "../components/ShopItem";
+// import { getProducts } from "../back/API";
+// let products = getProducts()
 
 const Shop: React.FC = () => {
   return (
@@ -19,6 +21,7 @@ const Shop: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
+          {/* {products} */}
 
           <ShopItem ItemID="2" />
         </IonContent>
