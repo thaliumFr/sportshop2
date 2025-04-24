@@ -15,6 +15,11 @@ export async function getProducts() {
 export async function getProduct(id: number) {
     return await Get("products/" + id)
 }
+
+export async function getProductsCount() {
+    let products = await Get("products")
+    return products.length;
+}
 //#endregion PRODUCTS
 
 //#region USER
@@ -34,5 +39,10 @@ export async function getOrders() {
 
 export async function getOrder(id: number) {
     return await Get("orders/" + id)
+}
+
+export async function getOrdersCount() {
+    let orders = await Get("orders/")
+    return orders.length
 }
 //#endregion PRODUCTS
