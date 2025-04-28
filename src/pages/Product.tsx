@@ -1,8 +1,9 @@
-import { IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Product.css';
-import { cart } from 'ionicons/icons';
+import { cart as cartIcon } from 'ionicons/icons';
 import { RouteComponentProps } from 'react-router';
+import { cart, Item } from '../back/cart';
 
 interface ProductDetailProps
     extends RouteComponentProps<{
@@ -14,7 +15,7 @@ const Product: React.FC<ProductDetailProps> = ({ match }) => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle><IonIcon aria-hidden="true" icon={cart} /> Product</IonTitle>
+                    <IonTitle><IonIcon aria-hidden="true" icon={cartIcon} /> Product</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
@@ -24,8 +25,13 @@ const Product: React.FC<ProductDetailProps> = ({ match }) => {
                     </IonToolbar>
                 </IonHeader>
                 <IonContent className="ion-padding">
-                    {match.params.id}
+                    <h1>{match.params.id}</h1>
 
+                    <IonButton onClick={() => {
+                        cart.AddProduct(new Item(match.params.id, "afeq", "sgfd", 1000, 1))
+                        cart.Save()
+                        console.log(cart.Get())
+                    }}>Add to Cart</IonButton>
                 </IonContent>
             </IonContent>
         </IonPage>

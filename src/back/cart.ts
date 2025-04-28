@@ -21,6 +21,16 @@ export class Cart {
     this.items = []
   }
 
+
+  Get(): Cart {
+    return localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")!) : this;
+  }
+
+  Save() {
+    localStorage.setItem("cart", JSON.stringify(this));
+  }
+
+
   ItemCount(): number {
     return this.items.length;
   }
@@ -62,4 +72,4 @@ export class Cart {
   }
 }
 
-export let cart = new Cart();
+export let cart: Cart = new Cart();
