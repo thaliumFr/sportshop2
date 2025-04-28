@@ -49,45 +49,65 @@ import './theme/variables.css';
 
 setupIonicReact();
 
-import { Cart, cart } from "./back/cart"
+import { cart } from './back/cart';
+import React from 'react';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/shop">
-            <Shop />
-          </Route>
-          <Route exact path="/panier">
-            <Panier />
-          </Route>
-          <Route path="/tab3">
-            <Tab3 />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/shop" />
-          </Route>
-          <Route path="/products/:id" component={Product} />
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="shop" href="/shop">
-            <IonIcon aria-hidden="true" icon={storefront} />
-            <IonLabel>Magasin</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="panier" href="/panier">
-            <IonIcon aria-hidden="true" icon={cartIcon} />
-            <IonLabel>Panier</IonLabel>
-            <IonBadge color="danger">{cart.ItemCount()}</IonBadge>
-          </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon aria-hidden="true" icon={ellipse} />
-            <IonLabel>Compte</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp >
-);
+interface AppState {
+  error: any;
+  isLoaded: boolean;
+}
+
+class App extends React.Component<{}, AppState> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      error: null,
+      isLoaded: false,
+    };
+  };
+
+
+  render() {
+    const { error, isLoaded } = this.state;
+    return (
+      <IonApp>
+        <IonReactRouter>
+          <IonTabs>
+            <IonRouterOutlet>
+              <Route exact path="/shop">
+                <Shop />
+              </Route>
+              <Route exact path="/panier">
+                <Panier />
+              </Route>
+              <Route path="/tab3">
+                <Tab3 />
+              </Route>
+              <Route exact path="/">
+                <Redirect to="/shop" />
+              </Route>
+              <Route path="/products/:id" component={Product} />
+            </IonRouterOutlet>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="shop" href="/shop">
+                <IonIcon aria-hidden="true" icon={storefront} />
+                <IonLabel>Magasin</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="panier" href="/panier">
+                <IonIcon aria-hidden="true" icon={cartIcon} />
+                <IonLabel>Panier</IonLabel>
+                <IonBadge color="danger">{cart.ItemCount()}</IonBadge>
+              </IonTabButton>
+              <IonTabButton tab="tab3" href="/tab3">
+                <IonIcon aria-hidden="true" icon={ellipse} />
+                <IonLabel>Compte</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactRouter>
+      </IonApp >
+    );
+  }
+}
 
 export default App;
