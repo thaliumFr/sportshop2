@@ -2,15 +2,11 @@ import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolba
 import './Product.css';
 import { cart as cartIcon } from 'ionicons/icons';
 import { RouteComponentProps, withRouter } from "react-router";
-import PropTypes from "prop-types";
 import { Cart, Item } from '../back/cart';
 import React from 'react';
 
 import { useParams } from 'react-router-dom';
 
-interface ProductProps {
-    id: string
-}
 
 const Product: React.FC<RouteComponentProps> = ({ match }) => {
     const { id } = useParams<{ id: string }>();

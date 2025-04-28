@@ -72,6 +72,7 @@ class Shop extends React.Component<{}, ShopState> {
                 </div>
               ))}
               <ShopItem item={new Item("a", "a", "aef0", 100, 1)} />
+              <ShopItem item={new Item("b", "bb", "azertfef0", 2, 1)} />
 
             </IonContent>
           </IonContent>
