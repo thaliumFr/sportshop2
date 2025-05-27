@@ -71,7 +71,8 @@ class Shop extends React.Component<{}, ShopState> {
                   <ShopItem item={item} />
                 </div>
               ))}
-              <ShopItem item={new Item("a", "a", "aef0", 100, 1)} />
+
+              {items.length == 0 && <IonItem><IonLabel>Aucun produit disponible</IonLabel></IonItem>}
 
             </IonContent>
           </IonContent>

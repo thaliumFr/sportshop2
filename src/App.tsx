@@ -11,7 +11,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { cart as cartIcon, cartOutline, ellipse, square, storefront, triangle } from 'ionicons/icons';
+import { cart as cartIcon, cartOutline, cogSharp, ellipse, square, storefront, triangle } from 'ionicons/icons';
 import Shop from './pages/shop';
 import Panier from './pages/panier';
 import Tab3 from './pages/Tab3';
@@ -49,26 +49,16 @@ import './theme/variables.css';
 
 setupIonicReact();
 
-import { cart } from './back/cart';
+import { Cart, cart } from './back/cart';
 import React from 'react';
+import PanierCount from './components/PanierCount';
 
-interface AppState {
-  error: any;
-  isLoaded: boolean;
-}
 
-class App extends React.Component<{}, AppState> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      error: null,
-      isLoaded: false,
-    };
-  };
+
+class App extends React.Component {
 
 
   render() {
-    const { error, isLoaded } = this.state;
     return (
       <IonApp>
         <IonReactRouter>
@@ -86,7 +76,7 @@ class App extends React.Component<{}, AppState> {
               <Route exact path="/">
                 <Redirect to="/shop" />
               </Route>
-              <Route path="/products/:id" component={Product} />
+              <Route path="/products/:id" render={(props) => { return <Product {...props} />; }} />
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
               <IonTabButton tab="shop" href="/shop">
@@ -96,7 +86,7 @@ class App extends React.Component<{}, AppState> {
               <IonTabButton tab="panier" href="/panier">
                 <IonIcon aria-hidden="true" icon={cartIcon} />
                 <IonLabel>Panier</IonLabel>
-                <IonBadge color="danger">{cart.ItemCount()}</IonBadge>
+                <PanierCount></PanierCount>
               </IonTabButton>
               <IonTabButton tab="tab3" href="/tab3">
                 <IonIcon aria-hidden="true" icon={ellipse} />

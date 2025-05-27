@@ -16,6 +16,7 @@ const ShopItem: React.FC<ContainerProps> = ({ item }) => {
                 <IonCardHeader>
                     <IonCardTitle>{item.name}</IonCardTitle>
                     <IonCardSubtitle>{item.reference}</IonCardSubtitle>
+                    <IonCardSubtitle>{item.price}€</IonCardSubtitle>
                 </IonCardHeader>
 
                 <IonCardContent>{item.desc}</IonCardContent>
