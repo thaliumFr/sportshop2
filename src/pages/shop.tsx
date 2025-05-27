@@ -28,10 +28,12 @@ class Shop extends React.Component<{}, ShopState> {
     getProducts()
       .then(
         (result) => {
+          console.log(result)
           this.setState({
             isLoaded: true,
             items: result
           });
+
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow

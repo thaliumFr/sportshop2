@@ -14,13 +14,18 @@ export async function getProducts(): Promise<Item[]> {
     let items: Item[] = []
 
     for (let i = 0; i < data.length; i++) {
-        items.push(new Item(data[i].id, data[i].name, data[i].desc, data[i].price, data[i].quantity))
+        let item = new Item(data[i].reference, data[i].name, data[i].desc, data[i].price, data[i].quantity)
+
+        let img = await getProductImages(data[i].reference);
+        item.images = img;
+
+        items.push(item)
     }
 
     return items
 }
 
-export async function getProduct(id: number) {
+export async function getProduct(id: string) {
     return await Get("products/" + id)
 }
 
@@ -28,6 +33,11 @@ export async function getProductsCount() {
     let products = await Get("products")
     return products.length;
 }
+
+export async function getProductImages(id: string) {
+    return await Get("products/" + id + "/images")
+}
+
 //#endregion PRODUCTS
 
 //#region USER
