@@ -4,7 +4,6 @@ import './panier.css';
 import { cart as cartIcon, storefront } from 'ionicons/icons';
 import { cart, Item } from '../back/cart';
 import PanierItem from '../components/PanierItem';
-import { render } from '@testing-library/react';
 import React from 'react';
 // import { use, useEffect, useState } from 'react';
 // import { getProducts } from '../back/API';
