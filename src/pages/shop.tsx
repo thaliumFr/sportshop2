@@ -1,10 +1,10 @@
 import { IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './shop.css';
-import { storefront } from 'ionicons/icons';
+import { create, storefront } from 'ionicons/icons';
 import ShopItem from "../components/ShopItem";
 import React from 'react';
-import { getProducts } from "../back/API";
+import { createUser, getProducts } from "../back/API";
 import { Item } from '../back/cart';
 // let products = getProducts()
 
@@ -35,9 +35,6 @@ class Shop extends React.Component<{}, ShopState> {
           });
 
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         (error) => {
           this.setState({
             isLoaded: true,
