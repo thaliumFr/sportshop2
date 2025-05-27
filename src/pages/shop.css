@@ -1,0 +1,21 @@
+ion-toolbar {
+  display: flex;
+  flex-direction: column;
+}
+ion-toolbar .logoM2l {
+  width: 50px;
+  margin: auto;
+  padding-top: 5%;
+}
+ion-toolbar ion-title {
+  display: block;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-width: 0;
+  margin: auto;
+  padding-bottom: 5%;
+}
+
+ion-searchbar {
+  margin: 5px;
+}/*# sourceMappingURL=shop.css.map */

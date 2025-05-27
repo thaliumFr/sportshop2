@@ -1,0 +1,23 @@
+ion-toolbar{
+    display: flex;
+    flex-direction: column;
+
+
+    .logoM2l{
+        width: 50px;
+        margin: auto;
+        padding-top: 5%;
+    }
+
+    ion-title{
+        display: block;
+        width: fit-content;
+        min-width: 0;
+        margin: auto;
+        padding-bottom: 5%;
+    }
+}
+
+ion-searchbar{
+    margin: 5px;
+}

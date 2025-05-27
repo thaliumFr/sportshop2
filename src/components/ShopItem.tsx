@@ -1,4 +1,4 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonNav } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonNav } from "@ionic/react";
 import Product from "../pages/Product";
 
 import "./ShopItem.css";
@@ -20,6 +20,9 @@ const ShopItem: React.FC<ContainerProps> = ({ item }) => {
                 </IonCardHeader>
 
                 <IonCardContent>{item.desc}</IonCardContent>
+                <IonButton>Fiche Produit</IonButton>
+                <IonButton>Ajouter au panier</IonButton>
+
             </IonCard>
         </a>
     );

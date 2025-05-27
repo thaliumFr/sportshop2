@@ -1,11 +1,10 @@
-import { IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import { IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonPage, IonTitle, IonToolbar, IonImg } from '@ionic/react';
 import './shop.css';
-import { storefront } from 'ionicons/icons';
 import ShopItem from "../components/ShopItem";
 import React from 'react';
 import { getProducts } from "../back/API";
 import { Item } from '../back/cart';
+import { IonSearchbar } from '@ionic/react';
 // let products = getProducts()
 
 interface ShopState {
@@ -54,17 +53,19 @@ class Shop extends React.Component<{}, ShopState> {
     } else {
       return (
         <IonPage>
+          <link rel="stylesheet" href="shop.css" />
           <IonHeader>
             <IonToolbar>
-              <IonTitle><IonIcon aria-hidden="true" icon={storefront} /> Magasin</IonTitle>
+              <IonImg
+                src="./resources/icon.png"
+                className='logoM2l'
+                alt="Logo SportShop"
+              ></IonImg>
+              <IonTitle size='large'>SportShop</IonTitle>
             </IonToolbar>
           </IonHeader>
           <IonContent fullscreen>
-            <IonHeader collapse="condense">
-              <IonToolbar>
-                <IonTitle size="large">Magasin</IonTitle>
-              </IonToolbar>
-            </IonHeader>
+            <IonSearchbar animated={true} placeholder='Rechercher'></IonSearchbar>
             <IonContent className="ion-padding">
               {items.map((item: Item) => (
                 <div key={item.reference}>
