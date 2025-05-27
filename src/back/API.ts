@@ -112,17 +112,8 @@ export async function Login(login: string, password: string): Promise<boolean> {
 //#endregion USER
 
 //#region ORDERS
-export async function getOrders() {
-    return await Get("orders")
-}
-
 export async function getOrder(id: number) {
     return await Get("orders/" + id)
-}
-
-export async function getOrdersCount() {
-    let orders = await Get("orders/")
-    return orders.length
 }
 
 export async function createOrder(delivery_address: string, price: number, id_user: string, products: Item[]) {
