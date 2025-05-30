@@ -1,4 +1,4 @@
-import { IonContent, IonList, IonLoading, IonItem, IonLabel, IonButton, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonList, IonLoading, IonItem, IonLabel, IonButton, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonAlert } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './compte.css';
 
@@ -30,12 +30,14 @@ const Compte: React.FC = () => {
     // TODO: Implement navigation to edit page or open modal
   };
 
-  const handleDeleteAccount = (event: React.MouseEvent<HTMLIonButtonElement>): void => {
-    const confirmDelete = window.confirm('Êtes-vous sûr de vouloir supprimer votre compte ?');
-    if (confirmDelete) {
-      console.log('Suppression du compte');
-      // TODO: Implement account deletion
-    }
+  const handleDeleteAccount = (): void => {
+    console.log('Suppression du compte');
+    // TODO: Implement account deletion
+  };
+
+  const handleDisconnect = (): void => {
+    console.log('Déconnexion');
+    // TODO: Implement disconnection logic
   };
 
   return (
@@ -53,7 +55,7 @@ const Compte: React.FC = () => {
         </IonHeader>
         <ExploreContainer name="Compte page" />
         <IonLoading isOpen={isLoading} message="Chargement..." />
-        
+
         {user && (
           <IonList>
             <IonItem>
@@ -107,25 +109,88 @@ const Compte: React.FC = () => {
           </IonList>
         )}
 
-        <div style={{ padding: '20px', textAlign: 'center' }}>
-          <IonButton 
+        <IonGrid>
+          <IonRow class="ion-justify-content-center ion-align-items-center ion-text-center">
+            <IonCol size="12" size-sm="3">
+              <IonButton
                 onClick={() => handleModifyField('login')}
+                className="ion-margin"
               >
                 Modifier mes informations
-          </IonButton>
-                  </div>
-                  <div style={{textAlign: 'center' }}>
-          <IonButton 
-            color="danger"
-            fill="outline"
-            size="small"
-            onClick={handleDeleteAccount}
-          >
-            Supprimer mon compte
-          </IonButton>
-        </div>
+              </IonButton>
+            </IonCol>
+            <IonCol size="12" size-sm="3">
+              <IonButton
+                color="secondary"
+                id='deco-alert'
+                className="ion-margin"
+              >
+                Me déconnecter
+              </IonButton>
+            </IonCol>
+            <IonCol size="12" size-sm="3">
+              <IonButton
+                color="danger"
+                fill="outline"
+                id='suppr-alert'
+                className="ion-margin"
+              >
+                Supprimer mon compte
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+
+        <IonAlert
+          header="Suppression de compte"
+          subHeader="Êtes-vous sûr de vouloir supprimer votre compte ?"
+          message="Cette action est irréversible et supprimera toutes vos données."
+          trigger="suppr-alert"
+          buttons={[
+            {
+              text: 'Annuler',
+              role: 'cancel',
+              handler: () => {
+                console.log('suppr canceled');
+              },
+            },
+            {
+              text: 'Supprimer',
+              role: 'confirm',
+              handler: () => {
+                console.log('suppression confirmed');
+                handleDeleteAccount()
+              },
+            },
+          ]}
+          onDidDismiss={({ detail }) => console.log(`Dismissed with role: ${detail.role}`)}
+        ></IonAlert>
+
+        <IonAlert
+          header="Deconnexion"
+          subHeader="Êtes-vous sûr de vouloir vous déconnecter ?"
+          trigger="deco-alert"
+          buttons={[
+            {
+              text: 'Anuler',
+              role: 'cancel',
+              handler: () => {
+                console.log('déconnexion canceled');
+              },
+            },
+            {
+              text: 'me déconnecter',
+              role: 'confirm',
+              handler: () => {
+                console.log('déconnexion confirmed');
+                handleDisconnect();
+              },
+            },
+          ]}
+          onDidDismiss={({ detail }) => console.log(`Dismissed with role: ${detail.role}`)}
+        ></IonAlert>
       </IonContent>
-    </IonPage>
+    </IonPage >
   );
 };
 
