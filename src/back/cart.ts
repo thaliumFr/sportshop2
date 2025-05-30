@@ -4,6 +4,7 @@ export class Item {
   desc: string;
   price: number;
   quantity: number;
+  images?: string;
 
   constructor(reference: string, name: string, desc: string, price: number, quantity: number) {
     this.reference = reference;
@@ -16,13 +17,36 @@ export class Item {
 
 export class Cart {
   items: Item[];
+  static onUpdateCount: () => void = () => { };
 
   constructor() {
     this.items = []
   }
 
+
+  Get(): Cart {
+    let cart = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")!) as Cart : this;
+    return Object.assign(new Cart(), cart);
+  }
+
+  static Get(): Cart {
+    let cart = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")!) as Cart : new Cart();
+    return Object.assign(new Cart(), cart);
+  }
+
+  Save() {
+    localStorage.setItem("cart", JSON.stringify(this));
+  }
+
   ItemCount(): number {
-    return this.items.length;
+    let res = 0;
+
+    for (let item of this.items) {
+      res += item.quantity;
+    }
+
+    return res;
+
   }
 
   findCartItemIndex(reference: string): number {
@@ -47,6 +71,9 @@ export class Cart {
     } else {
       this.items[index].quantity++;
     }
+
+    this.Save();
+    Cart.onUpdateCount();
   }
 
   RemoveProduct(item: Item) {
@@ -59,7 +86,10 @@ export class Cart {
         this.items.splice(index, 1);
       }
     }
+
+    this.Save();
+    Cart.onUpdateCount();
   }
 }
 
-export let cart = new Cart();
+export let cart: Cart = new Cart();

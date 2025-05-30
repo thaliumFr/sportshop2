@@ -1,48 +1,57 @@
-import { IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonIcon, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './panier.css';
-import { cart, storefront } from 'ionicons/icons';
+import { cart as cartIcon, storefront } from 'ionicons/icons';
+import { cart, Item } from '../back/cart';
+import PanierItem from '../components/PanierItem';
+import React from 'react';
 // import { use, useEffect, useState } from 'react';
 // import { getProducts } from '../back/API';
 
-const Panier: React.FC = () => {
-  // let products = use(getProducts());
+interface PanierState {
+  error: any;
+  isLoaded: boolean;
+}
 
-  // const [token, setToken] = useState('');
+class Panier extends React.Component<{}, PanierState> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      error: null,
+      isLoaded: false
+    };
+  };
 
-  // useEffect(() => {
-  //   // React advises to declare the async function directly inside useEffect
-  //   async function getToken() {
-  //     const data = await getProducts()
-  //     setToken(data);
-  //   };
+  render() {
+    const _cart = cart.Get();
 
-  //   // You need to restrict it at some point
-  //   // This is just dummy code and should be replaced by actual
-  //   if (!token) {
-  //     getToken();
-  //   }
-  // }, []);
-
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle><IonIcon aria-hidden="true" icon={cart} /> Panier</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
+    return (
+      <IonPage>
+        <IonHeader>
           <IonToolbar>
-
-            <IonTitle size="large">Tab 2</IonTitle>
-
+            <IonTitle><IonIcon aria-hidden="true" icon={cartIcon} /> Panier</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 2 page" />
-      </IonContent>
-    </IonPage>
-  );
-};
+        <IonContent fullscreen>
+          <IonHeader collapse="condense">
+            <IonToolbar>
+              <IonTitle size="large">Panier</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent className="ion-padding">
+            <IonList>
+              {_cart.items.map(item => {
+                return (
+                  <PanierItem item={item} key={item.reference} />
+                )
+              })}
+            </IonList>
+          </IonContent>
+
+        </IonContent>
+      </IonPage>
+    )
+  }
+}
 
 export default Panier;

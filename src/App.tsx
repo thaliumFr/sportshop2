@@ -11,7 +11,8 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { cart as cartIcon, cartOutline, person, ellipse, square, storefront, triangle } from 'ionicons/icons';
+import { cart as cartIcon, cartOutline, cogSharp, ellipse, square, storefront, triangle } from 'ionicons/icons';
+
 import Shop from './pages/shop';
 import Panier from './pages/panier';
 import Compte from './pages/compte';
@@ -49,45 +50,53 @@ import './theme/variables.css';
 
 setupIonicReact();
 
-import { Cart, cart } from "./back/cart"
+import { Cart, cart } from './back/cart';
+import React from 'react';
+import PanierCount from './components/PanierCount';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/shop">
-            <Shop />
-          </Route>
-          <Route exact path="/panier">
-            <Panier />
-          </Route>
-          <Route path="/compte">
-            <Compte />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/shop" />
-          </Route>
-          <Route path="/products/:id" component={Product} />
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="shop" href="/shop">
-            <IonIcon aria-hidden="true" icon={storefront} />
-            <IonLabel>Magasin</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="panier" href="/panier">
-            <IonIcon aria-hidden="true" icon={cartIcon} />
-            <IonLabel>Panier</IonLabel>
-            <IonBadge color="danger">{cart.ItemCount()}</IonBadge>
-          </IonTabButton>
-          <IonTabButton tab="compte" href={"/compte"}>
-            <IonIcon aria-hidden="true" icon={person} />
-            <IonLabel>Compte</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp >
-);
+class App extends React.Component {
+
+
+  render() {
+    return (
+      <IonApp>
+        <IonReactRouter>
+          <IonTabs>
+            <IonRouterOutlet>
+              <Route exact path="/shop">
+                <Shop />
+              </Route>
+              <Route exact path="/panier">
+                <Panier />
+              </Route>
+              <Route path="/compte">
+                <Compte />
+              </Route>
+              <Route exact path="/">
+                <Redirect to="/shop" />
+              </Route>
+              <Route path="/products/:id" render={(props) => { return <Product {...props} />; }} />
+            </IonRouterOutlet>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="shop" href="/shop">
+                <IonIcon aria-hidden="true" icon={storefront} />
+                <IonLabel>Magasin</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="panier" href="/panier">
+                <IonIcon aria-hidden="true" icon={cartIcon} />
+                <IonLabel>Panier</IonLabel>
+                <IonBadge color="danger">{cart.ItemCount()}</IonBadge>
+              </IonTabButton>
+              <IonTabButton tab="compte" href={"/compte"}>
+                <IonIcon aria-hidden="true" icon={person} />
+                <IonLabel>Compte</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactRouter>
+      </IonApp >
+    );
+  }
+}
 
 export default App;
