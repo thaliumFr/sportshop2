@@ -11,10 +11,10 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { cart as cartIcon, cartOutline, ellipse, square, storefront, triangle } from 'ionicons/icons';
+import { cart as cartIcon, cartOutline, person, ellipse, square, storefront, triangle } from 'ionicons/icons';
 import Shop from './pages/shop';
 import Panier from './pages/panier';
-import Tab3 from './pages/Tab3';
+import Compte from './pages/compte';
 import Product from "./pages/Product";
 
 /* Core CSS required for Ionic components to work properly */
@@ -62,8 +62,8 @@ const App: React.FC = () => (
           <Route exact path="/panier">
             <Panier />
           </Route>
-          <Route path="/tab3">
-            <Tab3 />
+          <Route path="/compte">
+            <Compte />
           </Route>
           <Route exact path="/">
             <Redirect to="/shop" />
@@ -80,8 +80,8 @@ const App: React.FC = () => (
             <IonLabel>Panier</IonLabel>
             <IonBadge color="danger">{cart.ItemCount()}</IonBadge>
           </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon aria-hidden="true" icon={ellipse} />
+          <IonTabButton tab="compte" href={"/compte"}>
+            <IonIcon aria-hidden="true" icon={person} />
             <IonLabel>Compte</IonLabel>
           </IonTabButton>
         </IonTabBar>
