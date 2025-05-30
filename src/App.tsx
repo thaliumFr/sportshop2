@@ -11,7 +11,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { cart as cartIcon, cartOutline, cogSharp, ellipse, square, storefront, triangle } from 'ionicons/icons';
+import { cart as cartIcon, cartOutline, cogSharp, ellipse, person, square, storefront, triangle } from 'ionicons/icons';
 
 import Shop from './pages/shop';
 import Panier from './pages/panier';
