@@ -5,28 +5,59 @@ const passwordSettings = {
     saltRounds: 12
 }
 
-const address = "https://sportappi.enzomtp.party/api/";
+const primaryAddress = "https://sportappi.enzomtp.party/api/";
+//const primaryAddress = "http://localhost/404/"; // Force l'échec
+const fallbackAddress = "http://localhost/sportapi/"; // l'API WAMP locale
+
+// Adapte le chemin pour la fallback locale (PHP)
+function adaptPathForFallback(path: string): string {
+    if (path.startsWith("products")) {
+        if (path === "products") return "products.php";
+        const parts = path.split("/");
+        if (parts.length === 2) return `product.php?reference=${parts[1]}`;
+        if (parts.length === 3 && parts[2] === "images") return `product_images.php?reference=${parts[1]}`;
+    }
+    if (path.startsWith("users")) {
+        if (path === "users") return "users.php";
+        const parts = path.split("/");
+        if (parts.length === 2) return `user.php?id=${parts[1]}`;
+        if (parts.length === 3 && parts[1] === "login") return `user_login.php?login=${parts[2]}`;
+    }
+    if (path.startsWith("orders")) {
+        if (path === "orders") return "orders.php";
+        const parts = path.split("/");
+        if (parts.length === 2) return `order.php?id=${parts[1]}`;
+    }
+    // Ajoute d'autres adaptations si besoin
+    return path;
+}
+
+async function fetchWithFallback(path: string, options?: RequestInit): Promise<any> {
+    try {
+        const res = await fetch(primaryAddress + path, options);
+        if (!res.ok) throw new Error("Primary API failed");
+        return await res.json();
+    } catch (e) {
+        console.warn("Primary API failed, trying fallback:", e);
+        const fallbackPath = adaptPathForFallback(path);
+        const res = await fetch(fallbackAddress + fallbackPath, options);
+        if (!res.ok) throw new Error("Fallback API failed");
+        return await res.json();
+    }
+}
 
 async function Get(path: string): Promise<any> {
-    const json = await fetch(address + path);
-    return JSON.parse(await json.text())
+    return fetchWithFallback(path);
 }
 
 async function Post(path: string, body: any): Promise<any> {
-    const json = await fetch(address + path, {
+    return fetchWithFallback(path, {
         method: "POST",
         headers: {
             "Content-Type": "application/json; charset=UTF-8"
         },
         body: JSON.stringify(body)
     });
-
-
-    if (json.status !== 201) {
-        throw new Error("Error " + json.status + ": " + await json.text());
-    }
-
-    return JSON.parse(await json.text())
 }
 
 //#region PRODUCTS
