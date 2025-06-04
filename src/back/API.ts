@@ -35,14 +35,22 @@ function adaptPathForFallback(path: string): string {
 async function fetchWithFallback(path: string, options?: RequestInit): Promise<any> {
     try {
         const res = await fetch(primaryAddress + path, options);
-        if (!res.ok) throw new Error("Primary API failed");
-        return await res.json();
+        if (!res.ok) throw new Error("Primary API failed: " + res.status);
+        try {
+            return await res.json();
+        } catch (jsonErr) {
+            throw new Error("Primary API invalid JSON");
+        }
     } catch (e) {
         console.warn("Primary API failed, trying fallback:", e);
         const fallbackPath = adaptPathForFallback(path);
         const res = await fetch(fallbackAddress + fallbackPath, options);
-        if (!res.ok) throw new Error("Fallback API failed");
-        return await res.json();
+        if (!res.ok) throw new Error("Fallback API failed: " + res.status);
+        try {
+            return await res.json();
+        } catch (jsonErr) {
+            throw new Error("Fallback API invalid JSON");
+        }
     }
 }
 
@@ -137,9 +145,13 @@ export async function Login(login: string, password: string): Promise<boolean> {
         return false;
     }
 
-    localStorage.setItem("user", JSON.stringify(await getUser(user.id)));
+    localStorage.setItem("user", JSON.stringify(user));
     return true;
 }
+export async function deleteUser(id: number) {
+    return await fetchWithFallback(`users/${id}`, { method: "DELETE" });
+}
+
 //#endregion USER
 
 //#region ORDERS
