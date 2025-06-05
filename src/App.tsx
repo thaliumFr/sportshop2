@@ -95,7 +95,8 @@ class App extends React.Component<{}, { cartCount: number }> {
               <Route>
                 <RegisterPage />
               </Route>
-              <Route path="/products/:id" render={(props) => { return <Product {...props} />; }} />
+
+              <Route path="/products/:id" component={Product} />
               <Route exact path="/login">
                 <LoginPage />
               </Route>

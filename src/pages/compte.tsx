@@ -60,7 +60,7 @@ const Compte: React.FC = () => {
   };
 
   const handleDisconnect = (): void => {
-    localStorage.removeItem("user"); 
+    localStorage.removeItem("user");
     history.replace("/login");
   };
 
@@ -77,7 +77,6 @@ const Compte: React.FC = () => {
             <IonTitle size="large">Compte</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Compte page" />
         <IonLoading isOpen={isLoading} message="Chargement..." />
 
         {isEditing && editUser ? (
