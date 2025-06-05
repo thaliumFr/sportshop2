@@ -11,12 +11,14 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { cart as cartIcon, cartOutline, cogSharp, ellipse, square, storefront, triangle } from 'ionicons/icons';
+import { cart as cartIcon, cartOutline, cogSharp, ellipse, person, square, storefront, triangle } from 'ionicons/icons';
+
 import Shop from './pages/shop';
 import Panier from './pages/panier';
-import Tab3 from './pages/Tab3';
+import Compte from './pages/compte';
 import Product from "./pages/Product";
-
+import LoginPage from './pages/login';
+import RegisterPage from './pages/register';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -53,10 +55,24 @@ import { Cart, cart } from './back/cart';
 import React from 'react';
 import PanierCount from './components/PanierCount';
 
+class App extends React.Component<{}, { cartCount: number }> {
+  constructor(props: any) {
+    super(props);
+    this.state = { cartCount: cart.ItemCount() };
+  }
 
+  componentDidMount() {
+    // Suppose que tu as un event ou callback sur le cart
+    window.addEventListener('cartUpdated', this.updateCartCount);
+  }
 
-class App extends React.Component {
+  componentWillUnmount() {
+    window.removeEventListener('cartUpdated', this.updateCartCount);
+  }
 
+  updateCartCount = () => {
+    this.setState({ cartCount: cart.ItemCount() });
+  };
 
   render() {
     return (
@@ -70,13 +86,19 @@ class App extends React.Component {
               <Route exact path="/panier">
                 <Panier />
               </Route>
-              <Route path="/tab3">
-                <Tab3 />
+              <Route path="/compte">
+                <Compte />
               </Route>
               <Route exact path="/">
                 <Redirect to="/shop" />
               </Route>
+              <Route>
+                <RegisterPage />
+              </Route>
               <Route path="/products/:id" render={(props) => { return <Product {...props} />; }} />
+              <Route exact path="/login">
+                <LoginPage />
+              </Route>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
               <IonTabButton tab="shop" href="/shop">
@@ -86,10 +108,10 @@ class App extends React.Component {
               <IonTabButton tab="panier" href="/panier">
                 <IonIcon aria-hidden="true" icon={cartIcon} />
                 <IonLabel>Panier</IonLabel>
-                <PanierCount></PanierCount>
+                <IonBadge color="danger">{this.state.cartCount}</IonBadge>
               </IonTabButton>
-              <IonTabButton tab="tab3" href="/tab3">
-                <IonIcon aria-hidden="true" icon={ellipse} />
+              <IonTabButton tab="compte" href={"/compte"}>
+                <IonIcon aria-hidden="true" icon={person} />
                 <IonLabel>Compte</IonLabel>
               </IonTabButton>
             </IonTabBar>
