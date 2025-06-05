@@ -1,8 +1,9 @@
-import { IonContent, IonList, IonLoading, IonItem, IonLabel, IonButton, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonAlert } from '@ionic/react';
+import { IonContent, IonList, IonLoading, IonItem, IonLabel, IonButton, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonAlert, IonInput } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './compte.css';
-
-import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { deleteUser } from '../back/API';
 
 type User = {
   login: string;
@@ -15,29 +16,52 @@ type User = {
 
 const Compte: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  // TODO: Replace this mock user with real user data from your auth/context/store
-  const [user, setUser] = useState<User | null>({
-    login: 'flbf',
-    name: 'Leboeuf',
-    surname: 'FRANCK',
-    address: '123 Rue Exemple',
-    zip: '34000',
-    city: 'Montpellier',
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editUser, setEditUser] = useState<User | null>(null);
+  const history = useHistory();
 
-  const handleModifyField = (field: string) => {
-    console.log(`Modifier ${field}`);
-    // TODO: Implement navigation to edit page or open modal
+  useEffect(() => {
+    // Récupère l'utilisateur depuis le localStorage (après login)
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      setUser(JSON.parse(userStr));
+    } else {
+      // Redirige vers /login si pas connecté
+      history.replace("/login");
+    }
+  }, [history]);
+
+  const handleModifyField = () => {
+    setEditUser(user);
+    setIsEditing(true);
   };
 
-  const handleDeleteAccount = (): void => {
-    console.log('Suppression du compte');
-    // TODO: Implement account deletion
+  const handleSaveEdit = () => {
+    if (editUser) {
+      setUser(editUser);
+      localStorage.setItem("user", JSON.stringify(editUser));
+      setIsEditing(false);
+      // TODO: Appeler ici une API pour mettre à jour côté serveur si besoin
+    }
+  };
+
+  const handleDeleteAccount = async (): Promise<void> => {
+    if (!user) return;
+    setIsLoading(true);
+    try {
+      await deleteUser((user as any).id); // ou user.id selon ton type User
+    } catch (e) {
+      // Optionnel : afficher une erreur
+    }
+    setIsLoading(false);
+    localStorage.removeItem("user");
+    history.replace("/login");
   };
 
   const handleDisconnect = (): void => {
-    console.log('Déconnexion');
-    // TODO: Implement disconnection logic
+    localStorage.removeItem("user"); 
+    history.replace("/login");
   };
 
   return (
@@ -56,7 +80,36 @@ const Compte: React.FC = () => {
         <ExploreContainer name="Compte page" />
         <IonLoading isOpen={isLoading} message="Chargement..." />
 
-        {user && (
+        {isEditing && editUser ? (
+          <IonList>
+            <IonItem>
+              <IonLabel position="stacked">Pseudo</IonLabel>
+              <IonInput value={editUser.login} onIonChange={e => setEditUser({ ...editUser, login: e.detail.value! })} />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Nom</IonLabel>
+              <IonInput value={editUser.name} onIonChange={e => setEditUser({ ...editUser, name: e.detail.value! })} />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Prénom</IonLabel>
+              <IonInput value={editUser.surname} onIonChange={e => setEditUser({ ...editUser, surname: e.detail.value! })} />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Adresse</IonLabel>
+              <IonInput value={editUser.address} onIonChange={e => setEditUser({ ...editUser, address: e.detail.value! })} />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Code postal</IonLabel>
+              <IonInput value={editUser.zip} onIonChange={e => setEditUser({ ...editUser, zip: e.detail.value! })} />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="stacked">Ville</IonLabel>
+              <IonInput value={editUser.city} onIonChange={e => setEditUser({ ...editUser, city: e.detail.value! })} />
+            </IonItem>
+            <IonButton expand="block" onClick={handleSaveEdit} className="ion-margin-top">Enregistrer</IonButton>
+            <IonButton expand="block" color="medium" onClick={() => setIsEditing(false)} className="ion-margin-top">Annuler</IonButton>
+          </IonList>
+        ) : user && (
           <IonList>
             <IonItem>
               <IonLabel>
@@ -113,7 +166,7 @@ const Compte: React.FC = () => {
           <IonRow class="ion-justify-content-center ion-align-items-center ion-text-center">
             <IonCol size="12" size-sm="3">
               <IonButton
-                onClick={() => handleModifyField('login')}
+                onClick={handleModifyField}
                 className="ion-margin"
               >
                 Modifier mes informations
@@ -172,14 +225,14 @@ const Compte: React.FC = () => {
           trigger="deco-alert"
           buttons={[
             {
-              text: 'Anuler',
+              text: 'Annuler',
               role: 'cancel',
               handler: () => {
                 console.log('déconnexion canceled');
               },
             },
             {
-              text: 'me déconnecter',
+              text: 'Me déconnecter',
               role: 'confirm',
               handler: () => {
                 console.log('déconnexion confirmed');
