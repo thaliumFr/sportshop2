@@ -1,3 +1,4 @@
+import { body } from "ionicons/icons";
 import { Item } from "./cart";
 import { genSalt, hash, compare } from 'bcryptjs';
 
@@ -6,36 +7,25 @@ const passwordSettings = {
 }
 
 const primaryAddress = "https://sportappi.enzomtp.party/api/";
-//const primaryAddress = "http://localhost/404/"; // Force l'échec
-const fallbackAddress = "http://localhost/sportapi/"; // l'API WAMP locale
+const fallbackAddress = "http://localhost:3311/api/"; // l'API WAMP locale
 
-// Adapte le chemin pour la fallback locale (PHP)
-function adaptPathForFallback(path: string): string {
-    if (path.startsWith("products")) {
-        if (path === "products") return "products.php";
-        const parts = path.split("/");
-        if (parts.length === 2) return `product.php?reference=${parts[1]}`;
-        if (parts.length === 3 && parts[2] === "images") return `product_images.php?reference=${parts[1]}`;
-    }
-    if (path.startsWith("users")) {
-        if (path === "users") return "users.php";
-        const parts = path.split("/");
-        if (parts.length === 2) return `user.php?id=${parts[1]}`;
-        if (parts.length === 3 && parts[1] === "login") return `user_login.php?login=${parts[2]}`;
-    }
-    if (path.startsWith("orders")) {
-        if (path === "orders") return "orders.php";
-        const parts = path.split("/");
-        if (parts.length === 2) return `order.php?id=${parts[1]}`;
-    }
-    // Ajoute d'autres adaptations si besoin
-    return path;
-}
-
-async function fetchWithFallback(path: string, options?: RequestInit): Promise<any> {
+async function Get(path: string): Promise<any> {
+    let options = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            "Authorization": import.meta.env.VITE_API_KEY
+        },
+    }; 
+  
     try {
         const res = await fetch(primaryAddress + path, options);
-        if (!res.ok) throw new Error("Primary API failed: " + res.status);
+      
+        if (res.status === 401) {
+            throw new Error("Unauthorized access. Please check your API key.");
+        }
+        else if (!res.ok) throw new Error("Primary API failed: " + res.status);
+      
         try {
             return await res.json();
         } catch (jsonErr) {
@@ -43,9 +33,11 @@ async function fetchWithFallback(path: string, options?: RequestInit): Promise<a
         }
     } catch (e) {
         console.warn("Primary API failed, trying fallback:", e);
-        const fallbackPath = adaptPathForFallback(path);
-        const res = await fetch(fallbackAddress + fallbackPath, options);
-        if (!res.ok) throw new Error("Fallback API failed: " + res.status);
+        if (res.status === 401) {
+            throw new Error("Unauthorized access. Please check your API key.");
+        }
+        else if (!res.ok) throw new Error("Primary API failed: " + res.status);
+      
         try {
             return await res.json();
         } catch (jsonErr) {
@@ -54,15 +46,12 @@ async function fetchWithFallback(path: string, options?: RequestInit): Promise<a
     }
 }
 
-async function Get(path: string): Promise<any> {
-    return fetchWithFallback(path);
-}
-
 async function Post(path: string, body: any): Promise<any> {
     return fetchWithFallback(path, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json; charset=UTF-8"
+            "Content-Type": "application/json; charset=UTF-8",
+            "Authorization": import.meta.env.VITE_API_KEY
         },
         body: JSON.stringify(body)
     });
