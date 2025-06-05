@@ -16,16 +16,16 @@ async function Get(path: string): Promise<any> {
             "Content-Type": "application/json; charset=UTF-8",
             "Authorization": import.meta.env.VITE_API_KEY
         },
-    }; 
-  
+    };
+
     try {
         const res = await fetch(primaryAddress + path, options);
-      
+
         if (res.status === 401) {
             throw new Error("Unauthorized access. Please check your API key.");
         }
         else if (!res.ok) throw new Error("Primary API failed: " + res.status);
-      
+
         try {
             return await res.json();
         } catch (jsonErr) {
@@ -33,11 +33,14 @@ async function Get(path: string): Promise<any> {
         }
     } catch (e) {
         console.warn("Primary API failed, trying fallback:", e);
+
+        const res = await fetch(fallbackAddress + path, options);
+
         if (res.status === 401) {
             throw new Error("Unauthorized access. Please check your API key.");
         }
         else if (!res.ok) throw new Error("Primary API failed: " + res.status);
-      
+
         try {
             return await res.json();
         } catch (jsonErr) {
@@ -47,14 +50,45 @@ async function Get(path: string): Promise<any> {
 }
 
 async function Post(path: string, body: any): Promise<any> {
-    return fetchWithFallback(path, {
+
+    let options = {
         method: "POST",
         headers: {
             "Content-Type": "application/json; charset=UTF-8",
             "Authorization": import.meta.env.VITE_API_KEY
         },
         body: JSON.stringify(body)
-    });
+    };
+
+    try {
+        const res = await fetch(primaryAddress + path, options);
+
+        if (res.status === 401) {
+            throw new Error("Unauthorized access. Please check your API key.");
+        }
+        else if (!res.ok) throw new Error("Primary API failed: " + res.status);
+
+        try {
+            return await res.json();
+        } catch (jsonErr) {
+            throw new Error("Primary API invalid JSON");
+        }
+    } catch (e) {
+        console.warn("Primary API failed, trying fallback:", e);
+
+        const res = await fetch(fallbackAddress + path, options);
+
+        if (res.status === 401) {
+            throw new Error("Unauthorized access. Please check your API key.");
+        }
+        else if (!res.ok) throw new Error("Primary API failed: " + res.status);
+
+        try {
+            return await res.json();
+        } catch (jsonErr) {
+            throw new Error("Fallback API invalid JSON");
+        }
+    }
 }
 
 //#region PRODUCTS
@@ -138,7 +172,13 @@ export async function Login(login: string, password: string): Promise<boolean> {
     return true;
 }
 export async function deleteUser(id: number) {
-    return await fetchWithFallback(`users/${id}`, { method: "DELETE" });
+    return await fetch(`users/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            "Authorization": import.meta.env.VITE_API_KEY
+        }
+    });
 }
 
 //#endregion USER
