@@ -1,3 +1,4 @@
+import { body } from "ionicons/icons";
 import { Item } from "./cart";
 import { genSalt, hash, compare } from 'bcryptjs';
 
@@ -8,15 +9,32 @@ const passwordSettings = {
 const address = "https://sportappi.enzomtp.party/api/";
 
 async function Get(path: string): Promise<any> {
-    const json = await fetch(address + path);
-    return JSON.parse(await json.text())
+    return await fetch(address + path, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            "Authorization": import.meta.env.VITE_API_KEY
+        },
+    }).then(async response => {
+
+        if (response.status === 401) {
+            throw new Error("Unauthorized access. Please check your API key.");
+        }
+
+        if (response.status !== 200) {
+            throw new Error("Error " + response.status + ": " + await response.text());
+        }
+        return JSON.parse(await response.text());
+
+    });
 }
 
 async function Post(path: string, body: any): Promise<any> {
     const json = await fetch(address + path, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json; charset=UTF-8"
+            "Content-Type": "application/json; charset=UTF-8",
+            "Authorization": import.meta.env.VITE_API_KEY
         },
         body: JSON.stringify(body)
     });
