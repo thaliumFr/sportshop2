@@ -16,11 +16,12 @@ export class Item {
   }
 }
 
-export class Cart {
+export class Cart extends EventTarget {
   items: Item[];
-  static onUpdateCount: () => void = () => { };
+  onUpdateCount: Event = new Event("cartUpdated", { bubbles: true, cancelable: false });
 
   constructor() {
+    super();
     this.items = []
   }
 
@@ -74,7 +75,7 @@ export class Cart {
     }
 
     this.Save();
-    Cart.onUpdateCount();
+    this?.dispatchEvent(this?.onUpdateCount);
   }
 
   RemoveProduct(item: Item) {
@@ -89,7 +90,7 @@ export class Cart {
     }
 
     this.Save();
-    Cart.onUpdateCount();
+    this?.dispatchEvent(this?.onUpdateCount);
   }
 }
 
