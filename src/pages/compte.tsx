@@ -3,9 +3,10 @@ import ExploreContainer from '../components/ExploreContainer';
 import './compte.css';
 import { useHistory } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { deleteUser } from '../back/API';
+import { deleteUser, updateUser } from '../back/API';
 
 type User = {
+  id_user: string;
   login: string;
   name: string;
   surname: string;
@@ -37,12 +38,19 @@ const Compte: React.FC = () => {
     setIsEditing(true);
   };
 
-  const handleSaveEdit = () => {
+  const handleSaveEdit = async () => {
     if (editUser) {
-      setUser(editUser);
-      localStorage.setItem("user", JSON.stringify(editUser));
-      setIsEditing(false);
-      // TODO: Appeler ici une API pour mettre à jour côté serveur si besoin
+      // Appel API pour mettre à jour côté serveur
+      try {
+        // Ajoute ici l'id de l'utilisateur si besoin (ex: user.id_user)
+        await updateUser((user as any).id_user, editUser);
+        setUser(editUser);
+        localStorage.setItem("user", JSON.stringify(editUser));
+        setIsEditing(false);
+      } catch (e) {
+        // Optionnel : afficher une erreur
+        console.error("Erreur lors de la mise à jour du profil :", e);
+      }
     }
   };
 
@@ -50,9 +58,10 @@ const Compte: React.FC = () => {
     if (!user) return;
     setIsLoading(true);
     try {
-      await deleteUser((user as any).id); // ou user.id selon ton type User
+      await deleteUser(user.id_user); 
     } catch (e) {
       // Optionnel : afficher une erreur
+      console.error("Erreur lors de la suppression du compte :", e);
     }
     setIsLoading(false);
     localStorage.removeItem("user");
@@ -60,7 +69,7 @@ const Compte: React.FC = () => {
   };
 
   const handleDisconnect = (): void => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("user"); 
     history.replace("/login");
   };
 
@@ -77,6 +86,7 @@ const Compte: React.FC = () => {
             <IonTitle size="large">Compte</IonTitle>
           </IonToolbar>
         </IonHeader>
+        <ExploreContainer name="Compte page" />
         <IonLoading isOpen={isLoading} message="Chargement..." />
 
         {isEditing && editUser ? (

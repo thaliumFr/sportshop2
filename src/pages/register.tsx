@@ -23,7 +23,20 @@ const RegisterPage: React.FC = () => {
     }
     setIsLoading(true);
     try {
-      await createUser(name, surname, address, zip, city, password, login);
+      // On suppose que createUser retourne l'id ou l'objet utilisateur créé
+      const userCreated = await createUser(name, surname, address, zip, city, password, login);
+
+      // On stocke toutes les infos dans le localStorage
+      localStorage.setItem("user", JSON.stringify({
+        id_user: userCreated?.id_user || "", // adapte selon le retour de createUser
+        login,
+        name,
+        surname,
+        address,
+        zip,
+        city
+      }));
+
       setIsLoading(false);
       setShowSuccess(true);
       setTimeout(() => history.replace('/login'), 1500);

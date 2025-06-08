@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonInput, IonButton, IonItem, IonLabel, IonLoading, IonToast } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
-import { Login } from '../back/API';
+import { Login, getUser, getUserLogin } from '../back/API';
 
 const LoginPage: React.FC = () => {
   const [login, setLogin] = useState('');
@@ -16,13 +16,33 @@ const LoginPage: React.FC = () => {
       return;
     }
     setIsLoading(true);
-    const success = await Login(login, password);
-    setIsLoading(false);
-    if (success) {
-      history.replace('/compte');
-    } else {
+    try {
+      const isLogged = await Login(login, password);
+      if (isLogged) {
+        const user = await getUserLogin(login);
+        if (user && user.id_user) {
+          const userProfile = await getUser(user.id_user);
+          if (userProfile) {
+            localStorage.setItem("user", JSON.stringify({
+              id_user: userProfile.id_user,
+              login: userProfile.login,
+              name: userProfile.name,
+              surname: userProfile.surname,
+              address: userProfile.address,
+              zip: userProfile.zip,
+              city: userProfile.city
+            }));
+            setIsLoading(false);
+            history.replace('/compte');
+            return;
+          }
+        }
+      }
+      setShowError(true);
+    } catch (e) {
       setShowError(true);
     }
+    setIsLoading(false);
   };
 
   const handleGoToRegister = () => {
