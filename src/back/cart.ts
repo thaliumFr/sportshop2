@@ -4,14 +4,15 @@ export class Item {
   desc: string;
   price: number;
   quantity: number;
-  images?: string;
+  images: string[];
 
-  constructor(reference: string, name: string, desc: string, price: number, quantity: number) {
+  constructor(reference: string, name: string, desc: string, price: number, quantity: number = 1, images: string[] = []) {
     this.reference = reference;
     this.name = name;
     this.desc = desc;
     this.price = price;
     this.quantity = quantity;
+    this.images = images;
   }
 }
 
