@@ -171,14 +171,56 @@ export async function Login(login: string, password: string): Promise<boolean> {
     localStorage.setItem("user", JSON.stringify(user));
     return true;
 }
-export async function deleteUser(id: number) {
-    return await fetch(`users/${id}`, {
+export async function deleteUser(id: string) {
+    let options = {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json; charset=UTF-8",
             "Authorization": import.meta.env.VITE_API_KEY
         }
-    });
+    };
+
+    try {
+        const res = await fetch(primaryAddress + "users/" + id, options);
+
+        if (res.status === 401) {
+            throw new Error("Unauthorized access. Please check your API key.");
+        }
+        else if (!res.ok) throw new Error("Primary API failed: " + res.status);
+
+        try {
+            return await res.json();
+        } catch (jsonErr) {
+            throw new Error("Primary API invalid JSON");
+        }
+    } catch (e) {
+        console.warn("Primary API failed, trying fallback:", e);
+
+        const res = await fetch(fallbackAddress + "users/" + id, options);
+
+        if (res.status === 401) {
+            throw new Error("Unauthorized access. Please check your API key.");
+        }
+        else if (!res.ok) throw new Error("Fallback API failed: " + res.status);
+
+        try {
+            return await res.json();
+        } catch (jsonErr) {
+            throw new Error("Fallback API invalid JSON");
+        }
+    }
+}
+
+export async function updateUser(id: number, userData: any) {
+    let options = {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            "Authorization": import.meta.env.VITE_API_KEY
+        },
+        body: JSON.stringify(userData)
+    };
+
 }
 
 //#endregion USER
