@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonIcon, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonIcon, IonItem, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './panier.css';
 import { cart as cartIcon, storefront } from 'ionicons/icons';
 import { cart, Item } from '../back/cart';
@@ -44,11 +44,14 @@ class Panier extends React.Component<{}, PanierState> {
                   <PanierItem item={item} key={item.reference} />
                 )
               })}
+              <IonItem>
+                <IonTitle> Prix total: {(_cart.PrixTotal()).toFixed(2)} €</IonTitle>
+              </IonItem>
             </IonList>
           </IonContent>
 
-        </IonContent>
-      </IonPage>
+        </IonContent >
+      </IonPage >
     )
   }
 }
