@@ -1,3 +1,5 @@
+import { PanierUpdateEvent } from "../App";
+
 export class Item {
   reference: string;
   name: string;
@@ -16,12 +18,10 @@ export class Item {
   }
 }
 
-export class Cart extends EventTarget {
+export class Cart {
   items: Item[];
-  onUpdateCount: Event = new Event("cartUpdated", { bubbles: true, cancelable: false });
 
   constructor() {
-    super();
     this.items = []
   }
 
@@ -38,6 +38,7 @@ export class Cart extends EventTarget {
 
   Save() {
     localStorage.setItem("cart", JSON.stringify(this));
+
   }
 
   ItemCount(): number {
@@ -75,7 +76,7 @@ export class Cart extends EventTarget {
     }
 
     this.Save();
-    this?.dispatchEvent(this?.onUpdateCount);
+    document.dispatchEvent(PanierUpdateEvent);
   }
 
   RemoveProduct(item: Item) {
@@ -90,7 +91,7 @@ export class Cart extends EventTarget {
     }
 
     this.Save();
-    this?.dispatchEvent(this?.onUpdateCount);
+    document.dispatchEvent(PanierUpdateEvent);
   }
 }
 
